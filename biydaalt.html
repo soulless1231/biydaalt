@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн Дэлгүүр</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background: #4CAF50;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+        nav {
+            background: #333;
+            color: white;
+            padding: 0.5em;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            padding: 2em;
+            text-align: center;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1em;
+        }
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 1em;
+            width: 300px;
+            background: white;
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .cart-section {
+            padding: 2em;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 2em auto;
+            max-width: 600px;
+        }
+        .cart-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .cart-section button {
+            margin-left: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .cart-section button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Манай Онлайн Дэлгүүрт тавтай морилно уу!</h1>
+    </header>
+    <nav>
+        <a href="#introduction">Нүүр</a>
+        <a href="#products">Дэлгүүр</a>
+        <a href="#cart">Сагс</a>
+        <a href="#contact">Холбоо барих</a>
+    </nav>
+    <section id="introduction">
+        <h2>Танилцуулга</h2>
+        <p>Манай онлайн дэлгүүрт тавтай морилно уу! Бид таны хэрэгцээнд зориулсан шилдэг бүтээгдэхүүнийг санал болгож байна.</p>
+    </section>
+    <section id="products">
+        <h2>Манай Бүтээгдэхүүнүүд</h2>
+        <div class="products">
+            <div class="product">
+                <img src="shirt.jpg" alt="Бүтээгдэхүүн 1">
+                <h3>Бүтээгдэхүүн 1</h3>
+                <p>$10.00</p>
+                <button onclick="addToCart('Бүтээгдэхүүн 1', 10)">Сагсанд Хийх</button>
+            </div>
+            <div class="product">
+                <img src="pants.jpg" alt="Бүтээгдэхүүн 2">
+                <h3>Бүтээгдэхүүн 2</h3>
+                <p>$20.00</p>
+                <button onclick="addToCart('Бүтээгдэхүүн 2', 20)">Сагсанд Хийх</button>
+            </div>
+            <div class="product">
+                <img src="shoes.jpg" alt="Бүтээгдэхүүн 3">
+                <h3>Бүтээгдэхүүн 3</h3>
+                <p>$30.00</p>
+                <button onclick="addToCart('Бүтээгдэхүүн 3', 30)">Сагсанд Хийх</button>
+            </div>
+        </div>
+    </section>
+    <section id="cart">
+        <h2>Таны Сагс</h2>
+        <div class="cart-section">
+            <ul id="cart-items">
+                <li>Таны сагс хоосон байна.</li>
+            </ul>
+            <p><strong>Нийт:</strong> $<span id="cart-total">0</span></p>
+        </div>
+    </section>
+    <section id="contact">
+        <h2>Холбоо Барих</h2>
+        <form>
+            <label for="name">Нэр:</label><br>
+            <input type="text" id="name" name="name" required><br>
+            <label for="email">Цахим Хаяг:</label><br>
+            <input type="email" id="email" name="email" required><br>
+            <label for="message">Мэдээ:</label><br>
+            <textarea id="message" name="message" rows="5" required></textarea><br>
+            <button type="submit">Илгээх</button>
+        </form>
+    </section>
+    <footer>
+        <p>&copy; 2024 Онлайн Дэлгүүр</p>
+    </footer>
+    <script>
+        // Сагсны үйл ажиллагаа
+        let cart = [];
+    
+        function addToCart(productName, productPrice) {
+            cart.push({ name: productName, price: productPrice });
+            updateCart();
+        }
+    
+        function removeFromCart(index) {
+            cart.splice(index, 1); // Сагснаас тухайн элементийг устгах
+            updateCart();
+        }
+    
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+    
+            // Сагсны одоогийн агуулгыг цэвэрлэх
+            cartItems.innerHTML = '';
+            let total = 0;
+    
+            if (cart.length === 0) {
+                cartItems.innerHTML = 'Таны сагс хоосон байна.';
+            } else {
+                cart.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+                    
+                    // Устгах товч үүсгэх
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'x';
+                    removeButton.onclick = () => removeFromCart(index);
+                    
+                    li.appendChild(removeButton); // Устгах товчийг жагсаалтын элементэд нэмэх
+                    cartItems.appendChild(li);
+                    total += item.price;
+                });
+            }
+            cartTotal.textContent = total.toFixed(2);
+        }
+    </script>
+</body>
+</html>
+
